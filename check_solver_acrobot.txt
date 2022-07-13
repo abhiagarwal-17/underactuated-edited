@@ -1,64 +1,76 @@
 
-File opened at Mon Jul 11 19:16:51 2022 by MOSEK version 9.3.20.
+File opened at Wed Jul 13 18:20:55 2022 by MOSEK version 9.3.20.
 Problem
   Name                   :                 
   Objective sense        : min             
   Type                   : CONIC (conic optimization problem)
-  Constraints            : 18600           
+  Constraints            : 3006            
   Cones                  : 0               
-  Scalar variables       : 57              
-  Matrix variables       : 2               
+  Scalar variables       : 324             
+  Matrix variables       : 3               
   Integer variables      : 0               
 
 Optimizer started.
+Presolve started.
+Linear dependency checker started.
+Linear dependency checker terminated.
+Eliminator started.
+Freed constraints in eliminator : 0
+Eliminator terminated.
+Eliminator - tries                  : 1                 time                   : 0.00            
+Lin. dep.  - tries                  : 1                 time                   : 0.00            
+Lin. dep.  - number                 : 0               
+Presolve terminated. Time: 0.00    
 Problem
   Name                   :                 
   Objective sense        : min             
   Type                   : CONIC (conic optimization problem)
-  Constraints            : 18600           
+  Constraints            : 3006            
   Cones                  : 0               
-  Scalar variables       : 57              
-  Matrix variables       : 2               
+  Scalar variables       : 324             
+  Matrix variables       : 3               
   Integer variables      : 0               
 
 Optimizer  - threads                : 6               
 Optimizer  - solved problem         : the primal      
-Optimizer  - Constraints            : 18600
+Optimizer  - Constraints            : 2867
 Optimizer  - Cones                  : 1
-Optimizer  - Scalar variables       : 58                conic                  : 58              
-Optimizer  - Semi-definite variables: 2                 scalarized             : 279558          
-Factor     - setup time             : 47.65             dense det. time        : 0.00            
-Factor     - ML order time          : 20.29             GP order time          : 0.00            
-Factor     - nonzeros before factor : 1.73e+08          after factor           : 1.73e+08        
-Factor     - dense dim.             : 0                 flops                  : 2.31e+12        
+Optimizer  - Scalar variables       : 299               conic                  : 298             
+Optimizer  - Semi-definite variables: 3                 scalarized             : 11326           
+Factor     - setup time             : 0.29              dense det. time        : 0.00            
+Factor     - ML order time          : 0.14              GP order time          : 0.00            
+Factor     - nonzeros before factor : 2.07e+06          after factor           : 2.23e+06        
+Factor     - dense dim.             : 2                 flops                  : 2.33e+09        
 ITE PFEAS    DFEAS    GFEAS    PRSTATUS   POBJ              DOBJ              MU       TIME  
-0   1.1e+00  1.0e+00  1.0e+00  0.00e+00   0.000000000e+00   0.000000000e+00   1.0e+00  48.66 
-1   6.5e-01  6.1e-01  7.2e-01  6.81e-03   -4.070811049e-01  -8.293290236e-03  6.1e-01  175.99
-2   1.3e-01  1.2e-01  2.6e-01  -4.19e-01  -3.552732443e+00  -6.822120722e-02  1.2e-01  252.80
-3   2.8e-02  2.6e-02  1.3e-01  -1.05e+00  -2.217319040e+01  -2.855199136e-01  2.7e-02  327.44
-4   1.1e-02  1.1e-02  8.3e-02  -1.01e+00  -6.200892033e+01  -6.481709897e-01  1.1e-02  399.32
-5   2.0e-03  1.9e-03  3.6e-02  -1.01e+00  -3.693503581e+02  -3.822125347e+00  2.0e-03  475.42
-6   9.9e-04  9.3e-04  2.6e-02  -9.94e-01  -7.774703014e+02  -7.761624227e+00  9.6e-04  547.45
-7   5.6e-04  5.3e-04  2.0e-02  -9.85e-01  -1.400212022e+03  -1.367031455e+01  5.4e-04  620.13
-8   1.3e-04  1.2e-04  9.2e-03  -9.71e-01  -5.884564658e+03  -5.849504282e+01  1.2e-04  695.58
-9   2.9e-05  2.7e-05  3.7e-03  -8.79e-01  -1.966082056e+04  -2.178407038e+02  2.6e-05  771.65
-10  7.4e-06  6.9e-06  1.2e-03  -5.54e-01  -3.030493506e+04  -5.144115344e+02  6.5e-06  846.86
-11  2.8e-06  2.6e-06  3.7e-04  5.97e-02   -2.051358384e+04  -7.272933314e+02  2.5e-06  918.77
-12  2.0e-06  1.8e-06  2.3e-04  5.03e-01   -1.612594977e+04  -7.851147288e+02  1.8e-06  991.54
-13  4.5e-07  4.1e-07  1.6e-05  6.24e-01   -2.393642815e+03  -9.181500494e+02  2.7e-07  1067.33
-14  1.9e-07  1.7e-07  4.6e-06  9.02e-01   -1.663207031e+03  -9.451082353e+02  1.2e-07  1139.40
-15  1.5e-07  1.3e-07  3.2e-06  9.58e-01   -1.562115299e+03  -9.500389009e+02  1.1e-07  1211.02
-16  7.3e-08  6.2e-08  6.4e-07  9.68e-01   -1.075976754e+03  -9.584576433e+02  4.7e-08  1284.92
-17  7.3e-08  6.2e-08  6.4e-07  9.86e-01   -1.075976754e+03  -9.584576433e+02  4.7e-08  1361.67
-18  7.3e-08  6.2e-08  6.4e-07  9.85e-01   -1.075976754e+03  -9.584576433e+02  4.7e-08  1436.09
-Optimizer terminated. Time: 1510.71 
+0   2.9e+00  6.4e+01  1.0e+00  0.00e+00   -1.000000793e-08  -1.000000793e-08  1.0e+00  0.31  
+1   7.8e-01  1.7e+01  5.0e-01  -1.04e+00  1.305231573e+01   1.558395187e+01   2.7e-01  0.59  
+2   1.3e-01  2.8e+00  9.1e-02  -5.98e-01  8.990300970e+00   1.301562406e+01   4.3e-02  0.91  
+3   1.4e-02  3.0e-01  4.8e-03  3.69e-01   1.166595387e+00   2.145798261e+00   4.7e-03  1.20  
+4   2.0e-03  4.3e-02  1.7e-04  9.00e-01   2.044838148e-01   2.627484993e-01   6.7e-04  1.50  
+5   1.4e-03  3.1e-02  1.1e-04  1.07e+00   1.378433296e-01   1.839966050e-01   4.8e-04  1.76  
+6   2.5e-04  5.5e-03  8.8e-06  1.02e+00   2.304102964e-02   3.255978378e-02   8.6e-05  2.06  
+7   1.3e-04  2.9e-03  2.8e-06  1.60e+00   9.847408333e-03   1.331217617e-02   4.6e-05  2.31  
+8   2.0e-05  4.4e-04  1.3e-07  1.44e+00   2.524917889e-03   2.849509364e-03   6.8e-06  2.59  
+9   3.5e-06  7.8e-05  8.5e-09  8.88e-01   3.356445591e-04   3.754835362e-04   1.2e-06  2.91  
+10  5.0e-07  1.1e-05  1.6e-09  7.73e-01   2.002899048e-04   2.765820502e-04   1.8e-07  3.21  
+11  6.3e-08  1.5e-06  4.0e-10  -7.61e-01  1.147536042e-04   4.020346192e-04   2.5e-08  3.50  
+12  3.6e-08  2.2e-07  1.3e-10  -5.27e-01  1.176017513e-04   1.514734298e-03   3.7e-09  3.80  
+13  3.3e-08  2.1e-07  1.3e-10  -1.01e+00  1.181237671e-04   1.638349606e-03   3.4e-09  4.94  
+14  3.3e-08  2.0e-07  1.3e-10  -9.96e-01  1.182077556e-04   1.669754881e-03   3.3e-09  5.22  
+15  3.2e-08  2.0e-07  1.3e-10  -9.94e-01  1.182267705e-04   1.677640423e-03   3.3e-09  5.51  
+16  3.2e-08  2.0e-07  1.3e-10  -9.94e-01  1.182314112e-04   1.679614191e-03   3.3e-09  5.80  
+17  3.2e-08  2.0e-07  1.3e-10  -9.94e-01  1.182337222e-04   1.680601537e-03   3.3e-09  6.10  
+18  3.2e-08  2.0e-07  1.3e-10  -9.94e-01  1.182342972e-04   1.680848402e-03   3.3e-09  6.42  
+19  3.2e-08  2.0e-07  1.3e-10  -9.94e-01  1.182342972e-04   1.680848402e-03   3.3e-09  6.73  
+20  3.2e-08  2.0e-07  1.3e-10  -1.04e+00  1.182342972e-04   1.680848402e-03   3.3e-09  7.03  
+Optimizer terminated. Time: 7.34    
 
 
 Interior-point solution summary
   Problem status  : UNKNOWN
   Solution status : UNKNOWN
-  Primal.  obj: -1.0759767545e+03   nrm: 5e+07    Viol.  con: 2e+02    var: 0e+00    barvar: 0e+00  
-  Dual.    obj: -9.5845764327e+02   nrm: 8e+07    Viol.  con: 0e+00    var: 4e-03    barvar: 8e-03  
+  Primal.  obj: 1.1823429719e-04    nrm: 3e+03    Viol.  con: 1e-03    var: 1e-04    barvar: 0e+00  
+  Dual.    obj: 1.6808483884e-03    nrm: 4e+03    Viol.  con: 0e+00    var: 8e-07    barvar: 2e-06  
 
-File closed: Mon Jul 11 19:42:02 2022
+File closed: Wed Jul 13 18:21:02 2022
 
