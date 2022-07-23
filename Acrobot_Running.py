@@ -128,6 +128,11 @@ if __name__ == '__main__':
 
     P = control.lyap(A_cloop.T, Q_lyap, E = E.T)
 
+    #add the controller
+    u = -K@x 
+    print(u)
+    f[3] = f[3] + u[0]*(1+p1**2)*(1+p2**2)
+
     V = x.T@M.T@P@M@x
     V = Polynomial(V)
     Vdot = f.T@P@M@x + x.T@Mdot.T@P@M@x + x.T@M.T@P@Mdot@x + x.T@M.T@P@f
@@ -162,6 +167,8 @@ if __name__ == '__main__':
     print(str(result.get_solver_details().solution_status))
 
     print(str(result.GetSolution(rho)))
+
+    print(result.GetSolution(lambda_))
 
 
     print('Reached here succeffuly. Suck it!')
