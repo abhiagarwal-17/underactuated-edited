@@ -129,13 +129,16 @@ if __name__ == '__main__':
     P = control.lyap(A_cloop.T, Q_lyap, E = E.T)
 
     #add the controller
-    u = -K@x 
+    K2 = B.T@X@M
+    u = -K2@x 
     print(u)
     f[3] = f[3] + u[0]*(1+p1**2)*(1+p2**2)
 
-    V = x.T@M.T@P@M@x
+    V = x.T@E.T@P@E@x
     V = Polynomial(V)
-    Vdot = f.T@P@M@x + x.T@Mdot.T@P@M@x + x.T@M.T@P@Mdot@x + x.T@M.T@P@f
+    #Vdot = f.T@P@M@x + x.T@Mdot.T@P@M@x + x.T@M.T@P@Mdot@x + x.T@M.T@P@f
+    Vdot = f.T@P@E@x + x.T@E.T@P@f
+
     Vdot = Polynomial(Vdot[0])
 
     # do the certification
@@ -146,7 +149,7 @@ if __name__ == '__main__':
 
     l_deg = Vdot.TotalDegree()
 
-    lambda_, _ = prog.NewSosPolynomial(Variables(x), l_deg) 
+    lambda_, lambda_Q = prog.NewSosPolynomial(Variables(x), l_deg) 
 
     print('Reached here so LOL')
 
@@ -168,7 +171,7 @@ if __name__ == '__main__':
 
     print(str(result.GetSolution(rho)))
 
-    print(result.GetSolution(lambda_))
+    print(np.linalg.eigvals(result.GetSolution(lambda_Q)))
 
 
     print('Reached here succeffuly. Suck it!')

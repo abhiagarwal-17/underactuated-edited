@@ -33,6 +33,103 @@ from pydrake.all import (Jacobian, MathematicalProgram, Polynomial,
 
 from pydrake.solvers.mosek import MosekSolver
 
+def find_lambdas(V, Vdot, x): 
+    print('finding lambda')
+    prog = MathematicalProgram()
+    prog.AddIndeterminates(x)
+
+    rho = prog.NewContinuousVariables(1, 'rho')[0]
+
+    l_deg = Vdot.TotalDegree()
+    l_deg = 10
+
+    lambda_, lambda_Q = prog.NewSosPolynomial(Variables(x), l_deg) 
+
+    prog.AddSosConstraint(Polynomial(x.dot(x))*(V-rho) - lambda_*Vdot)
+
+    prog.AddLinearCost(-rho)
+
+    options = SolverOptions()
+    options.SetOption(CommonSolverOption.kPrintFileName, './check_solver_acrobot.txt')
+
+    solver = MosekSolver()
+
+    result = solver.Solve(prog, solver_options=options)
+
+    assert result.is_success(), str(result.get_solver_details().solution_status)
+
+    lambda_sol = result.GetSolution(lambda_).RemoveTermsWithSmallCoefficients(1e-5)
+    rho_sol = result.GetSolution(rho)
+
+    return lambda_sol, rho_sol
+
+def find_V(lambda_, M, Mdot, f, rho, x): 
+    print('Finding V')
+    prog = MathematicalProgram()
+    prog.AddIndeterminates(x)
+
+    S = prog.NewSymmetricContinuousVariables(4, 'S')
+
+    V = x.T@M.T@S@M@x 
+    Vdot = f.T@S@M@x + x.T@Mdot.T@S@M@x + x.T@M.T@S@Mdot@x + x.T@M.T@S@f
+    Vdot = Vdot[0]
+
+    prog.AddSosConstraint(x.dot(x)*(V-rho) - lambda_.ToExpression()*Vdot)
+    prog.AddCost(np.trace(S))
+    prog.AddLinearConstraint(V.Substitute({x[0]:0, x[1]:0, x[2]:0, x[3]:0}) == 0)
+
+    options = SolverOptions()
+    options.SetOption(CommonSolverOption.kPrintFileName, './check_solver_acrobot.txt')
+
+    solver = MosekSolver()
+    result = solver.Solve(prog, solver_options=options)
+
+    assert result.is_success(), str(result.get_solver_details().solution_status)
+
+    S_sol = result.GetSolution(S)
+
+    return S_sol
+
+def search_function(x, K, B, X, M, Mdot, P, f, max_itr, conv_tol): 
+    print('Entering Search')
+    #add the controller
+    K2 = B.T@X@M
+    u = -K@x 
+    print(u)
+    f[3] = f[3] + u[0]*(1+p1**2)*(1+p2**2)
+
+    V = x.T@M.T@P@M@x
+    V = Polynomial(V)
+    Vdot = f.T@P@M@x + x.T@Mdot.T@P@M@x + x.T@M.T@P@Mdot@x + x.T@M.T@P@f
+    Vdot = Polynomial(Vdot[0])
+
+    S_old = P
+    Ss = []
+    rhos = []
+    for i in range(max_itr): 
+        lambda_sol, rho = find_lambdas(V, Vdot, x)
+        S = find_V(lambda_, M, Mdot, f, rho, x)
+
+        V = x.T@M.T@S@M@x
+        V = Polynomial(V)
+        Vdot = f.T@S@M@x + x.T@Mdot.T@S@M@x + x.T@M.T@S@Mdot@x + x.T@M.T@S@f
+        Vdot = Polynomial(Vdot[0])
+
+        if np.sum(np.abs((S_old-S)/S_old) < conv_tol) == 16:
+            break
+
+        print(i)
+        print(S)  
+
+        S_old = S
+        Ss.append(S)
+        rhos.append(rho)
+
+    return Ss, rhos
+
+
+
+    print('Reached here succeffuly. Suck it!')
 
 if __name__ == '__main__': 
     p = AcrobotParams()
@@ -128,59 +225,16 @@ if __name__ == '__main__':
 
     P = control.lyap(A_cloop.T, Q_lyap, E = E.T)
 
-    #add the controller
-    K2 = B.T@X@M
-    u = -K@x 
-    u = Polynomial(u[0])
-    print(u)
-    f[3] = f[3] + 3*(1+p1**2)*(1+p2**2)
+    max_itr = 1
+    conv_tol = 1e-2
 
+    Ss, rhos = search_function(x, K, B, X, M, Mdot, P, f, max_itr, conv_tol)
 
-    V = x.T@M.T@P@M@x
-    V = Polynomial(V)
-    Vdot = f.T@P@M@x + x.T@Mdot.T@P@M@x + x.T@M.T@P@Mdot@x + x.T@M.T@P@f
-    Vdot = Polynomial(Vdot[0])
+    Ss = np.array(Ss)
+    rhos = np.array(rhos)
 
-    print(Vdot.TotalDegree())
+    np.save('./acrobot_alternations_S.npy', Ss)
+    np.save('./acrobot_alternations_rho.npy')
 
-    # do the certification
-    prog = MathematicalProgram()
-    prog.AddIndeterminates(x)
-
-    rho = prog.NewContinuousVariables(1, 'rho')[0]
-
-    l_deg = Vdot.TotalDegree()
-    u_deg = Vdot.TotalDegree()
-
-    l_deg = 10
-    u_deg = 10
-
-    lambda_, lambda_Q = prog.NewSosPolynomial(Variables(x), l_deg) 
-    lambda_u, lambda_uQ = prog.NewSosPolynomial(Variables(x), u_deg)
-
-    print('Reached here so LOL')
-
-    #prog.AddSosConstraint(-Vdot + lambda_*(V - rho))
-
-    prog.AddSosConstraint(Polynomial(x.dot(x))*(V-rho) - lambda_*Vdot + lambda_u*(3 - u))
-
-    prog.AddLinearCost(-rho)
-
-    options = SolverOptions()
-    options.SetOption(CommonSolverOption.kPrintFileName, './check_solver_acrobot.txt')
-    options.SetOption(MosekSolver().solver_id(), "MSK_IPAR_NUM_THREADS", 8)
-
-    solver = MosekSolver()
-
-    print('Reached here ')
-    result = solver.Solve(prog, solver_options=options)
-
-    print(str(result.get_solver_details().solution_status))
-
-    print(str(result.GetSolution(rho)))
-
-    #print(result.GetSolution(lambda_))
-    np.save('Q_cert.npy', result.GetSolution(lambda_Q))
-
-
-    print('Reached here succeffuly. Suck it!')
+    print(P)
+   
