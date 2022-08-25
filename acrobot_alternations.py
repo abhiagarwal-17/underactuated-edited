@@ -107,7 +107,7 @@ def search_function(x, K, B, X, M, Mdot, P, f, max_itr, conv_tol):
     Ss = []
     rhos = []
     for i in range(max_itr): 
-        lambda_sol, rho = find_lambdas(V, Vdot, x)
+        lambda_, rho = find_lambdas(V, Vdot, x)
         S = find_V(lambda_, M, Mdot, f, rho, x)
 
         V = x.T@M.T@S@M@x
